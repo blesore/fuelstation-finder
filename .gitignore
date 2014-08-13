@@ -1,0 +1,25 @@
+# Misc #
+*~
+*.class
+target
+classes
+*.log
+.externalToolBuilders
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Eclipse files #
+.project
+.settings
+.classpath
+
+# NetBeans files #
+nbactions*
+nb-configuration.xml
+
+# HSQL tempo files #
+b4tb-testdb.properties
+b4tb-testdb.script

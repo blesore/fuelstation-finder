@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Fuel Station Finder</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_my_map">MyMapActivity</string>
+    <string name="title_activity_maps_legal_notice">MapsLegalNoticeActivity</string>
+    <string name="legal_info">Legal Info</string>
+    <string name="play_services_not_installed">Google Play services is not installed on this device.</string>
+    <string name="no_maps">The map cannot be displayed right now. Try later!</string>
+    <string name="title_activity_abstract_map">AbstractMapActivity</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+
+</resources>
