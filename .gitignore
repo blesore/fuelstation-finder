@@ -20,6 +20,5 @@ classes
 nbactions*
 nb-configuration.xml
 
-# HSQL tempo files #
-b4tb-testdb.properties
-b4tb-testdb.script
+# Android #
+gen

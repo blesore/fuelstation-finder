@@ -16,5 +16,10 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
+    <string name="distance_label">Distance: </string>
+    <string name="last_updated_label">Last Updated: </string>
+    <string name="brand_logo">brand logo</string>
+    <string name="close_btn">Close</string>
+    <string name="drive_me_btn">Drive Me</string>
 
 </resources>

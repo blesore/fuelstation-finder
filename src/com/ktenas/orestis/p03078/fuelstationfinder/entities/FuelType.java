@@ -1,40 +1,22 @@
 package com.ktenas.orestis.p03078.fuelstationfinder.entities;
 
-import java.util.Date;
+public enum FuelType {
+	UNLEADED_95("Uleaded 95"),
+	UNLEADED_100("Uleaded 100"),
+	DIESEL("Diesel"),
+	AUTOGAS("Autogas");
+	
+	private String title;
 
-public class FuelType {
-	private String ôype;
-	private float price;
-	private Date lastUpdated;
-
-	private FuelType(String ôype, float price, Date lastUpdated) {
-		super();
-		this.ôype = ôype;
-		this.price = price;
-		this.lastUpdated = lastUpdated;
+	private FuelType(String title) {
+		this.setTitle(title);
 	}
 
-	public String getFuelType() {
-		return ôype;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setFuelType(String fuelType) {
-		this.ôype = fuelType;
-	}
-
-	public float getPrice() {
-		return price;
-	}
-
-	public void setPrice(float price) {
-		this.price = price;
-	}
-
-	public Date getLastUpdated() {
-		return lastUpdated;
-	}
-
-	public void setLastUpdated(Date lastUpdated) {
-		this.lastUpdated = lastUpdated;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 }

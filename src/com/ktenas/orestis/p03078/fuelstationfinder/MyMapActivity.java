@@ -1,5 +1,8 @@
 package com.ktenas.orestis.p03078.fuelstationfinder;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -8,15 +11,17 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
+import android.app.DialogFragment;
+import android.app.FragmentTransaction;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.preference.PreferenceManager;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -27,24 +32,35 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.ktenas.orestis.p03078.fuelstationfinder.PointProviderService.LocalBinder;
+import com.ktenas.orestis.p03078.fuelstationfinder.entities.FuelStation;
 
 public class MyMapActivity extends AbstractMapAndTrackActivity implements
-		LocationListener {
+		LocationListener, OnMarkerClickListener {
 
-	PointProviderService boundService;
+	private SharedPreferences prefs;
+	private PointProviderService boundService;
 	boolean isServiceBound = false;
-	private Set<LatLng> relativePoints;
 	private ExecutorService singleThreadExecutor;
-	GoogleMap map;
+	private GoogleMap map;
 	private MapFragment mapFragment;
+	private static final String MAP_FRAGMENT_TAG = "map";
+	private CameraPosition DEFAULT_CAMERA_POSITION = new CameraPosition(
+			new LatLng(37.9245587, 23.8192248), 10, 30, 0);
 	private GoogleApiClient googleApiClient;
 	private LocationRequest locationRequest;
 	private Location lastKnownLocation;
+	private static Map<String, FuelStation> stationPoints;
+	static {
+		stationPoints = new HashMap<>();
+	}
 	private final int UPDATE_INTERVAL = 5000;
 	private ServiceConnection serviceConnection = new ServiceConnection() {
 
@@ -66,13 +82,40 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// setContentView(R.layout.activity_map);
+		setContentView(R.layout.activity_map);
+
 		if (servicesConnected()) {
-			mapFragment = (MapFragment) getFragmentManager().findFragmentById(
-					R.id.map);
+			// mapFragment = (MapFragment)
+			// getFragmentManager().findFragmentById(
+			// R.id.map);
+
+			// It isn't possible to set a fragment's id programmatically so
+			// we set a tag instead and
+			// search for it using that.
+			mapFragment = (MapFragment) getFragmentManager().findFragmentByTag(
+					MAP_FRAGMENT_TAG);
+
 			if (savedInstanceState == null) {
-				// First incarnation of this activity.
-				mapFragment.setRetainInstance(true);
+				// We only create a fragment if it doesn't already exist.
+				if (mapFragment == null) {
+					GoogleMapOptions googleMapOptions = new GoogleMapOptions();
+					googleMapOptions.mapType(GoogleMap.MAP_TYPE_NORMAL)
+							.camera(DEFAULT_CAMERA_POSITION)
+							.compassEnabled(true).rotateGesturesEnabled(true)
+							.scrollGesturesEnabled(true)
+							.zoomGesturesEnabled(true)
+							.zoomControlsEnabled(false)
+							.tiltGesturesEnabled(true);
+					mapFragment = MapFragment.newInstance(googleMapOptions);
+					FragmentTransaction fragmentTransaction = getFragmentManager()
+							.beginTransaction();
+					fragmentTransaction.add(R.id.map_container, mapFragment,
+							MAP_FRAGMENT_TAG);
+					fragmentTransaction.commit();
+
+					// First incarnation of this activity.
+					mapFragment.setRetainInstance(true);
+				}
 			} else {
 				// Reincarnated activity. The obtained map is the same map
 				// instance in the previous
@@ -91,7 +134,20 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements
 			locationRequest = LocationRequest.create()
 					.setInterval(UPDATE_INTERVAL)
 					.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+			prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		}
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onRestoreInstanceState(savedInstanceState);
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
 	}
 
 	@Override
@@ -107,6 +163,7 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements
 	@Override
 	public void onResume() {
 		super.onResume();
+		// In case Google Play services has since become available.
 		setUpMapIfNeeded();
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	}
@@ -143,23 +200,6 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements
 	};
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.my_map, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == R.id.legal) {
-			startActivity(new Intent(this, LegalInfoActivity.class));
-
-			return (true);
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
-	@Override
 	public void onConnectionFailed(ConnectionResult connectionResult) {
 		super.onConnectionFailed(connectionResult);
 	}
@@ -176,11 +216,11 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements
 		super.onConnectionSuspended(arg0);
 	}
 
-	private Callable<Set<LatLng>> task = new Callable<Set<LatLng>>() {
+	private Callable<Set<FuelStation>> task = new Callable<Set<FuelStation>>() {
 
 		@Override
-		public Set<LatLng> call() {
-			Set<LatLng> relativePoints = boundService
+		public Set<FuelStation> call() {
+			Set<FuelStation> relativePoints = boundService
 					.getPoints(lastKnownLocation);
 			return relativePoints;
 		}
@@ -198,10 +238,10 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements
 			map.animateCamera(CameraUpdateFactory
 					.newCameraPosition(cameraPosition));
 			if (boundService != null) {
-				Future<Set<LatLng>> future = singleThreadExecutor.submit(task);
-
+				Future<Set<FuelStation>> future = singleThreadExecutor
+						.submit(task);
 				try {
-					for (LatLng point : future.get()) {
+					for (FuelStation point : future.get()) {
 						addMarker(map, point);
 					}
 				} catch (InterruptedException | ExecutionException e) {
@@ -222,14 +262,31 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements
 				// The Map is verified. It is now safe to manipulate the map.
 				map.setMyLocationEnabled(true);
 				map.getUiSettings().setMyLocationButtonEnabled(false);
+				map.setOnMarkerClickListener(this);
 			} else {
 				Toast.makeText(this, R.string.no_maps, Toast.LENGTH_LONG)
 						.show();
 			}
+		} else {
+			// set reincarnated activity as listener
+			map.setOnMarkerClickListener(this);
 		}
 	}
 
-	private void addMarker(GoogleMap map, LatLng position) {
-		map.addMarker(new MarkerOptions().position(position));
+	private void addMarker(GoogleMap map, FuelStation point) {
+		Marker marker = map.addMarker(new MarkerOptions().position(point
+				.getPosition()));
+		String markerId = marker.getId();
+		if (!stationPoints.containsKey(markerId)) {
+			stationPoints.put(markerId, point);
+		}
+	}
+
+	@Override
+	public boolean onMarkerClick(Marker marker) {
+		DialogFragment stationInfo = StationInfoDialogFragment.newInstance(
+				lastKnownLocation, stationPoints.get(marker.getId()));
+		stationInfo.show(getFragmentManager(), "station info");
+		return true;
 	}
 }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <ListPreference
+        android:defaultValue="0"
+        android:entries="@array/pref_driving_mode_titles"
+        android:entryValues="@array/pref_driving_mode_values"
+        android:key="driving_mode"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_driving_mode" />
+    <ListPreference
+        android:defaultValue="0"
+        android:entries="@array/pref_fuel_type_titles"
+        android:entryValues="@array/pref_fuel_type_values"
+        android:key="fuel_type"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_fuel_type" />
+    <ListPreference
+        android:defaultValue="0"
+        android:entries="@array/pref_station_brand_titles"
+        android:entryValues="@array/pref_station_brand_values"
+        android:key="station_brand"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_station_brand" />
+
+    <Preference android:title="@string/pref_title_location_source_settings" >
+        <intent android:action="android.settings.LOCATION_SOURCE_SETTINGS" />
+    </Preference>
+
+</PreferenceScreen>

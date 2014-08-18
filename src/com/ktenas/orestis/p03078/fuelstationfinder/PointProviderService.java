@@ -15,12 +15,14 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.ktenas.orestis.p03078.fuelstationfinder.entities.FuelStation;
+import com.ktenas.orestis.p03078.fuelstationfinder.entities.StationBrand;
 
 public class PointProviderService extends Service {
 	private final IBinder localBinder = new LocalBinder();
-	private static Set<LatLng> points = new HashSet<>();
+	private static Set<FuelStation> points = new HashSet<>();
 
-	public Set<LatLng> getPoints(Location location) {
+	public Set<FuelStation> getPoints(Location location) {
 		double lat;
 		double lng;
 		if (points.isEmpty()) {
@@ -35,7 +37,7 @@ public class PointProviderService extends Service {
 					temp = line.split(",");
 					lat = Double.parseDouble(temp[0]);
 					lng = Double.parseDouble(temp[1]);
-					points.add(new LatLng(lat, lng));
+					points.add(new FuelStation(0, null, null, StationBrand.AEGEAN, new LatLng(lat, lng), null));
 				}
 				br.close();
 			} catch (IOException e) {

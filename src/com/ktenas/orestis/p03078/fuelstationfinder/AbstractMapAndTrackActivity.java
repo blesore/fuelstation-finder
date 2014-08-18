@@ -3,6 +3,7 @@ package com.ktenas.orestis.p03078.fuelstationfinder;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
@@ -19,18 +20,35 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 public class AbstractMapAndTrackActivity extends Activity implements
 		ConnectionCallbacks, OnConnectionFailedListener {
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.my_map, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case (R.id.legal):
+			startActivity(new Intent(this, LegalInfoActivity.class));
+			return (true);
+		case (R.id.action_settings):
+			getFragmentManager().beginTransaction()
+					.replace(R.id.map_container, new SettingsFragment()).addToBackStack(null)
+					.commit();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
 	/*
 	 * Define a request code to send to Google Play services This code is
 	 * returned in Activity.onActivityResult
 	 */
 	private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_map);
-	}
-	
 	// Define a DialogFragment that displays the error dialog
 	public static class ErrorDialogFragment extends DialogFragment {
 		// Global field to contain the error dialog
@@ -146,7 +164,8 @@ public class AbstractMapAndTrackActivity extends Activity implements
 	@Override
 	public void onConnected(Bundle dataBundle) {
 		// Display the connection status
-		Toast.makeText(this, "Connected to Location Services", Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, "Connected to Location Services",
+				Toast.LENGTH_SHORT).show();
 	}
 
 	/*

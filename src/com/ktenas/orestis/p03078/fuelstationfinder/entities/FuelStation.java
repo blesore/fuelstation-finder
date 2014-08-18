@@ -2,25 +2,28 @@ package com.ktenas.orestis.p03078.fuelstationfinder.entities;
 
 import java.util.List;
 
-public class FuelStation {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.android.gms.maps.model.LatLng;
+
+public class FuelStation implements Parcelable {
 	private long stationCode;
 	private String address;
 	private String ownerName;
-	private String brand;
-	private double longitude;
-	private double latitude;
+	private StationBrand brand;
+	private LatLng position;
 	private List<FuelType> fuelTypes;
 
-	private FuelStation(long stationCode, String address, String ownerName,
-			String brand, double longitude, double latitude,
+	public FuelStation(long stationCode, String address, String ownerName,
+			StationBrand brand, LatLng position,
 			List<FuelType> fuelTypes) {
 		super();
 		this.stationCode = stationCode;
 		this.address = address;
 		this.ownerName = ownerName;
 		this.brand = brand;
-		this.longitude = longitude;
-		this.latitude = latitude;
+		this.position = position;
 		this.fuelTypes = fuelTypes;
 	}
 
@@ -48,28 +51,20 @@ public class FuelStation {
 		this.ownerName = ownerName;
 	}
 
-	public String getBrand() {
+	public StationBrand getBrand() {
 		return brand;
 	}
 
-	public void setBrand(String brand) {
+	public void setBrand(StationBrand brand) {
 		this.brand = brand;
 	}
 
-	public double getLongitude() {
-		return longitude;
+	public LatLng getPosition() {
+		return position;
 	}
 
-	public void setLongitude(double longitude) {
-		this.longitude = longitude;
-	}
-
-	public double getLatitude() {
-		return latitude;
-	}
-
-	public void setLatitude(double latitude) {
-		this.latitude = latitude;
+	public void setLongitude(LatLng position) {
+		this.position = position;
 	}
 
 	public List<FuelType> getFuelTypes() {
@@ -78,5 +73,17 @@ public class FuelStation {
 
 	public void setFuelTypes(List<FuelType> fuelTypes) {
 		this.fuelTypes = fuelTypes;
+	}
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		// TODO Auto-generated method stub
+		
 	}
 }
