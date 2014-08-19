@@ -22,3 +22,6 @@ nb-configuration.xml
 
 # Android #
 gen
+api_key.xml
+bin
+libs

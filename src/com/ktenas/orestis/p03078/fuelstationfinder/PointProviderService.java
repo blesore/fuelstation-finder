@@ -4,7 +4,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Set;
 
 import android.app.Service;
@@ -15,7 +22,9 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.ktenas.orestis.p03078.fuelstationfinder.entities.Fuel;
 import com.ktenas.orestis.p03078.fuelstationfinder.entities.FuelStation;
+import com.ktenas.orestis.p03078.fuelstationfinder.entities.FuelType;
 import com.ktenas.orestis.p03078.fuelstationfinder.entities.StationBrand;
 
 public class PointProviderService extends Service {
@@ -37,7 +46,7 @@ public class PointProviderService extends Service {
 					temp = line.split(",");
 					lat = Double.parseDouble(temp[0]);
 					lng = Double.parseDouble(temp[1]);
-					points.add(new FuelStation(0, null, null, StationBrand.AEGEAN, new LatLng(lat, lng), null));
+					points.add(new FuelStation(0, null, null, StationBrand.AEGEAN, new LatLng(lat, lng), Arrays.asList(new Fuel[]{new Fuel(FuelType.UNLEADED_95, (float) 1.685)}), new Date(2014, 8, 18)));
 				}
 				br.close();
 			} catch (IOException e) {

@@ -30,26 +30,16 @@
     <string name="pref_title_station_brand">Station brand</string>
     <string-array name="pref_station_brand_titles">
         <item>All Brands</item>
+        <item>AEGEAN</item>
         <item>AVIN</item>
         <item>BP</item>
         <item>CYCLON</item>
-        <item>DRACOIL</item>
+        <item>ELINOIL</item>
         <item>EKO</item>
-        <item>EL-PETROIL</item>
-        <item>GALONOIL</item>
+        <item>ETEKA</item>
         <item>JETOIL</item>
-        <item>KAOIL</item>
-        <item>KMOIL</item>
-        <item>MEDOIL</item>
         <item>REVOIL</item>
         <item>SHELL</item>
-        <item>SILKOIL</item>
-        <item>SUNOIL</item>
-        <item>AEGEAN</item>
-        <item>INDEPENDENT STATION</item>
-        <item>ARGO</item>
-        <item>ELINOIL</item>
-        <item>ETEKA</item>
     </string-array>
     <string-array name="pref_station_brand_values">
         <item>0</item>
@@ -63,16 +53,6 @@
         <item>8</item>
         <item>9</item>
         <item>10</item>
-        <item>11</item>
-        <item>12</item>
-        <item>13</item>
-        <item>14</item>
-        <item>15</item>
-        <item>16</item>
-        <item>17</item>
-        <item>18</item>
-        <item>19</item>
-        <item>20</item>
     </string-array>
     
     <string name="pref_title_location_source_settings">System Location Settings</string>

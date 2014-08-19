@@ -1,5 +1,6 @@
 package com.ktenas.orestis.p03078.fuelstationfinder.entities;
 
+import java.util.Date;
 import java.util.List;
 
 import android.os.Parcel;
@@ -13,18 +14,20 @@ public class FuelStation implements Parcelable {
 	private String ownerName;
 	private StationBrand brand;
 	private LatLng position;
-	private List<FuelType> fuelTypes;
+	private List<Fuel> availableFuel;
+	private Date lastUpdated;
 
-	public FuelStation(long stationCode, String address, String ownerName,
+		public FuelStation(long stationCode, String address, String ownerName,
 			StationBrand brand, LatLng position,
-			List<FuelType> fuelTypes) {
+			List<Fuel> availableFuel, Date lastUpdated) {
 		super();
 		this.stationCode = stationCode;
 		this.address = address;
 		this.ownerName = ownerName;
 		this.brand = brand;
 		this.position = position;
-		this.fuelTypes = fuelTypes;
+		this.availableFuel = availableFuel;
+		this.lastUpdated = lastUpdated;
 	}
 
 	public long getStationCode() {
@@ -63,16 +66,24 @@ public class FuelStation implements Parcelable {
 		return position;
 	}
 
-	public void setLongitude(LatLng position) {
+	public void setPosition(LatLng position) {
 		this.position = position;
 	}
 
-	public List<FuelType> getFuelTypes() {
-		return fuelTypes;
+	public List<Fuel> getAvailableFuel() {
+		return availableFuel;
 	}
 
-	public void setFuelTypes(List<FuelType> fuelTypes) {
-		this.fuelTypes = fuelTypes;
+	public void setAvailableFuel(List<Fuel> availableFuel) {
+		this.availableFuel = availableFuel;
+	}
+	
+	public Date getLastUpdated() {
+		return lastUpdated;
+	}
+
+	public void setLastUpdated(Date lastUpdated) {
+		this.lastUpdated = lastUpdated;
 	}
 
 	@Override

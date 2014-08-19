@@ -1493,11 +1493,11 @@ containing a value of this type.
         public static final int action_bar_subtitle=0x7f090035;
         public static final int action_bar_title=0x7f090034;
         public static final int action_context_bar=0x7f09002f;
-        public static final int action_example=0x7f090058;
+        public static final int action_example=0x7f09005a;
         public static final int action_menu_divider=0x7f090028;
         public static final int action_menu_presenter=0x7f090029;
         public static final int action_mode_close_button=0x7f090036;
-        public static final int action_settings=0x7f090057;
+        public static final int action_settings=0x7f090059;
         public static final int activity_chooser_view_content=0x7f090037;
         public static final int always=0x7f09001e;
         public static final int beginning=0x7f090023;
@@ -1511,14 +1511,16 @@ containing a value of this type.
         public static final int default_activity_button=0x7f09003a;
         public static final int dialog=0x7f090021;
         public static final int disableHome=0x7f09001b;
-        public static final int distance=0x7f090051;
-        public static final int distance_label=0x7f090050;
+        public static final int distance_label=0x7f090052;
+        public static final int distance_value=0x7f090053;
         public static final int dropdown=0x7f090022;
         public static final int edit_query=0x7f090042;
         public static final int end=0x7f090025;
         public static final int expand_activities_button=0x7f090038;
         public static final int expanded_menu=0x7f09003e;
-        public static final int fuel_info_container=0x7f090053;
+        public static final int fuel_info_container=0x7f090055;
+        public static final int fuel_type_label=0x7f090050;
+        public static final int fuel_type_title=0x7f090051;
         public static final int grayscale=0x7f090012;
         public static final int holo_dark=0x7f090005;
         public static final int holo_light=0x7f090006;
@@ -1528,10 +1530,10 @@ containing a value of this type.
         public static final int icon=0x7f09003c;
         public static final int ifRoom=0x7f09001d;
         public static final int image=0x7f090039;
-        public static final int last_updated=0x7f090055;
-        public static final int last_updated_label=0x7f090054;
+        public static final int last_updated_label=0x7f090056;
+        public static final int last_updated_value=0x7f090057;
         public static final int legal=0x7f09004f;
-        public static final int legal_info=0x7f090056;
+        public static final int legal_info=0x7f090058;
         public static final int listMode=0x7f090014;
         public static final int list_item=0x7f09003b;
         public static final int map_container=0x7f09004e;
@@ -1541,7 +1543,7 @@ containing a value of this type.
         public static final int never=0x7f09001c;
         public static final int none=0x7f090000;
         public static final int normal=0x7f090001;
-        public static final int owner_info=0x7f090052;
+        public static final int owner_info=0x7f090054;
         public static final int production=0x7f090007;
         public static final int progress_circular=0x7f09002a;
         public static final int progress_horizontal=0x7f09002b;
@@ -1628,9 +1630,10 @@ containing a value of this type.
         public static final int abc_simple_decor=0x7f030017;
         public static final int activity_map=0x7f030018;
         public static final int activity_maps_legal_notice=0x7f030019;
-        public static final int info_window=0x7f03001a;
-        public static final int legal_info=0x7f03001b;
-        public static final int support_simple_spinner_dropdown_item=0x7f03001c;
+        public static final int fuel_list_item=0x7f03001a;
+        public static final int info_window=0x7f03001b;
+        public static final int legal_info=0x7f03001c;
+        public static final int support_simple_spinner_dropdown_item=0x7f03001d;
     }
     public static final class menu {
         public static final int global=0x7f0e0000;
@@ -1678,17 +1681,17 @@ containing a value of this type.
         /**  Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
         public static final int abc_shareactionprovider_share_with_application=0x7f07002b;
-        public static final int action_example=0x7f07003b;
-        public static final int action_settings=0x7f07002e;
-        public static final int app_name=0x7f07002d;
+        public static final int action_example=0x7f07003c;
+        public static final int action_settings=0x7f07002f;
+        public static final int app_name=0x7f07002e;
         public static final int auth_client_needs_enabling_title=0x7f070001;
         public static final int auth_client_needs_installation_title=0x7f070002;
         public static final int auth_client_needs_update_title=0x7f070003;
         public static final int auth_client_play_services_err_notification_msg=0x7f070004;
         public static final int auth_client_requested_by_msg=0x7f070005;
         public static final int auth_client_using_bad_version_title=0x7f070000;
-        public static final int brand_logo=0x7f07003e;
-        public static final int close_btn=0x7f07003f;
+        public static final int brand_logo=0x7f07003f;
+        public static final int close_btn=0x7f070040;
         /**  Button in confirmation dialog to enable Google Play services.  Clicking it
         will direct user to application settings of Google Play services where they
         can enable it [CHAR LIMIT=40] 
@@ -1778,48 +1781,49 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f07001e;
-        public static final int distance_label=0x7f07003c;
-        public static final int drive_me_btn=0x7f070040;
-        public static final int last_updated_label=0x7f07003d;
-        public static final int legal_info=0x7f070031;
-        public static final int navigation_drawer_close=0x7f07003a;
-        public static final int navigation_drawer_open=0x7f070039;
-        public static final int no_maps=0x7f070033;
-        public static final int play_services_not_installed=0x7f070032;
-        public static final int pref_default_display_name=0x7f07004a;
-        public static final int pref_description_social_recommendations=0x7f070048;
+        public static final int distance_label=0x7f07003d;
+        public static final int drive_me_btn=0x7f070041;
+        public static final int last_updated_label=0x7f07003e;
+        public static final int legal_info=0x7f070032;
+        public static final int maps_api_key=0x7f07002d;
+        public static final int navigation_drawer_close=0x7f07003b;
+        public static final int navigation_drawer_open=0x7f07003a;
+        public static final int no_maps=0x7f070034;
+        public static final int play_services_not_installed=0x7f070033;
+        public static final int pref_default_display_name=0x7f07004b;
+        public static final int pref_description_social_recommendations=0x7f070049;
         /**  Example settings for Data & Sync 
          */
-        public static final int pref_header_data_sync=0x7f07004c;
+        public static final int pref_header_data_sync=0x7f07004d;
         /**  Example General settings 
          */
-        public static final int pref_header_general=0x7f070046;
+        public static final int pref_header_general=0x7f070047;
         /**  Example settings for Notifications 
          */
-        public static final int pref_header_notifications=0x7f07004f;
-        public static final int pref_ringtone_silent=0x7f070052;
-        public static final int pref_title_add_friends_to_messages=0x7f07004b;
-        public static final int pref_title_display_name=0x7f070049;
+        public static final int pref_header_notifications=0x7f070050;
+        public static final int pref_ringtone_silent=0x7f070053;
+        public static final int pref_title_add_friends_to_messages=0x7f07004c;
+        public static final int pref_title_display_name=0x7f07004a;
         /**  Strings related to Settings 
          */
-        public static final int pref_title_driving_mode=0x7f070042;
-        public static final int pref_title_fuel_type=0x7f070043;
-        public static final int pref_title_location_source_settings=0x7f070045;
-        public static final int pref_title_new_message_notifications=0x7f070050;
-        public static final int pref_title_ringtone=0x7f070051;
-        public static final int pref_title_social_recommendations=0x7f070047;
-        public static final int pref_title_station_brand=0x7f070044;
-        public static final int pref_title_sync_frequency=0x7f07004d;
-        public static final int pref_title_system_sync_settings=0x7f07004e;
-        public static final int pref_title_vibrate=0x7f070053;
-        public static final int title_activity_abstract_map=0x7f070034;
-        public static final int title_activity_main=0x7f070035;
-        public static final int title_activity_maps_legal_notice=0x7f070030;
-        public static final int title_activity_my_map=0x7f07002f;
-        public static final int title_activity_settings=0x7f070041;
-        public static final int title_section1=0x7f070036;
-        public static final int title_section2=0x7f070037;
-        public static final int title_section3=0x7f070038;
+        public static final int pref_title_driving_mode=0x7f070043;
+        public static final int pref_title_fuel_type=0x7f070044;
+        public static final int pref_title_location_source_settings=0x7f070046;
+        public static final int pref_title_new_message_notifications=0x7f070051;
+        public static final int pref_title_ringtone=0x7f070052;
+        public static final int pref_title_social_recommendations=0x7f070048;
+        public static final int pref_title_station_brand=0x7f070045;
+        public static final int pref_title_sync_frequency=0x7f07004e;
+        public static final int pref_title_system_sync_settings=0x7f07004f;
+        public static final int pref_title_vibrate=0x7f070054;
+        public static final int title_activity_abstract_map=0x7f070035;
+        public static final int title_activity_main=0x7f070036;
+        public static final int title_activity_maps_legal_notice=0x7f070031;
+        public static final int title_activity_my_map=0x7f070030;
+        public static final int title_activity_settings=0x7f070042;
+        public static final int title_section1=0x7f070037;
+        public static final int title_section2=0x7f070038;
+        public static final int title_section3=0x7f070039;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 
          */

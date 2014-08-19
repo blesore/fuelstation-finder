@@ -1,17 +1,14 @@
 package com.ktenas.orestis.p03078.fuelstationfinder.entities;
 
-import java.util.Date;
 
 public class Fuel {
 	private FuelType type;
 	private float price;
-	private Date lastUpdated;
 
-	private Fuel(FuelType type, float price, Date lastUpdated) {
+	public Fuel(FuelType type, float price) {
 		super();
 		this.type = type;
 		this.price = price;
-		this.lastUpdated = lastUpdated;
 	}
 
 	public FuelType getFuelType() {
@@ -28,13 +25,5 @@ public class Fuel {
 
 	public void setPrice(float price) {
 		this.price = price;
-	}
-
-	public Date getLastUpdated() {
-		return lastUpdated;
-	}
-
-	public void setLastUpdated(Date lastUpdated) {
-		this.lastUpdated = lastUpdated;
 	}
 }

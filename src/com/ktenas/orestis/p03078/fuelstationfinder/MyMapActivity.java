@@ -1,6 +1,5 @@
 package com.ktenas.orestis.p03078.fuelstationfinder;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -57,10 +56,7 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements
 	private GoogleApiClient googleApiClient;
 	private LocationRequest locationRequest;
 	private Location lastKnownLocation;
-	private static Map<String, FuelStation> stationPoints;
-	static {
-		stationPoints = new HashMap<>();
-	}
+	private static Map<String, FuelStation> stationPoints = new HashMap<>();
 	private final int UPDATE_INTERVAL = 5000;
 	private ServiceConnection serviceConnection = new ServiceConnection() {
 
@@ -238,8 +234,7 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements
 			map.animateCamera(CameraUpdateFactory
 					.newCameraPosition(cameraPosition));
 			if (boundService != null) {
-				Future<Set<FuelStation>> future = singleThreadExecutor
-						.submit(task);
+				Future<Set<FuelStation>> future = singleThreadExecutor.submit(task);
 				try {
 					for (FuelStation point : future.get()) {
 						addMarker(map, point);
@@ -274,12 +269,8 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements
 	}
 
 	private void addMarker(GoogleMap map, FuelStation point) {
-		Marker marker = map.addMarker(new MarkerOptions().position(point
-				.getPosition()));
-		String markerId = marker.getId();
-		if (!stationPoints.containsKey(markerId)) {
-			stationPoints.put(markerId, point);
-		}
+		Marker marker = map.addMarker(new MarkerOptions().position(point.getPosition()));
+		stationPoints.put(marker.getId(), point);
 	}
 
 	@Override
