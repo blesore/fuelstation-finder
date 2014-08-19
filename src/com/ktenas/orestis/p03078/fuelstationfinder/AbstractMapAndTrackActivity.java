@@ -3,7 +3,6 @@ package com.ktenas.orestis.p03078.fuelstationfinder;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;

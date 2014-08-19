@@ -1,8 +1,8 @@
 package com.ktenas.orestis.p03078.fuelstationfinder.entities;
 
 public enum FuelType {
-	UNLEADED_95("Uleaded 95"),
-	UNLEADED_100("Uleaded 100"),
+	UNLEADED_95("Unleaded 95"),
+	UNLEADED_100("Unleaded 100"),
 	DIESEL("Diesel"),
 	AUTOGAS("Autogas");
 	
