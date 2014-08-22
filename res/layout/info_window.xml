@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,55 +10,54 @@
         android:layout_height="35dp"
         android:orientation="horizontal" >
 
-        <TextView
-            android:id="@+id/owner_info"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.58"
-            android:singleLine="false"
-            android:gravity="left"
-            android:text="Ktenas Orestis Yakinthou 3g agia paraskeyh asfasdfasdfasdfasdfasdfasdfasdfasdfasdfghjkfdhjkfhhjahjaafhfsadgsggfdsg"
-            android:textColor="@android:color/secondary_text_light_nodisable" />
-
         <RelativeLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.42"
-            android:layout_alignParentRight="true"
-            android:gravity="right" >
+            android:layout_alignParentLeft="true"
+            android:gravity="start" >
 
             <TextView
                 android:id="@+id/distance_label"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:layout_toLeftOf="@+id/distance_value"
-                android:text="@string/distance_label"
-                android:gravity="right" />
+                android:text="@string/distance_label" />
 
             <TextView
                 android:id="@+id/distance_value"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:paddingLeft="13dp"
-                android:text="2500m" />
-
+                android:layout_toRightOf="@id/distance_label"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:textStyle="bold"
+                android:textColor="#6F1C1C"
+                android:text="2.5km" />
         </RelativeLayout>
+
+        <TextView
+            android:id="@+id/owner_info"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="8dp"
+            android:paddingRight="0dp"
+            android:singleLine="false"
+            android:text="Ktenas Orestis Yakinthou 3g agia paraskeyh adfsdfa asdfasdfa asdfasdf"
+            android:textColor="@android:color/secondary_text_light_nodisable" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/fuel_info_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="0.60"
         android:orientation="vertical"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp" >
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp" >
     </LinearLayout>
 
     <RelativeLayout
@@ -83,9 +82,10 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/last_updated_label"
+            android:layout_toRightOf="@id/last_updated_label"
             android:gravity="bottom"
-            android:paddingLeft="20dp" >
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp" >
         </TextView>
     </RelativeLayout>
 

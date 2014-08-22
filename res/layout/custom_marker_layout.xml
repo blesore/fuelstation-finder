@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+    <ImageView
+        android:id="@+id/station_brand_placeholder"
+        android:layout_width="23dp"
+        android:layout_height="23dp" />
+
+    <TextView
+        android:id="@+id/marker_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/station_brand_placeholder"
+        android:gravity="center"
+        android:textStyle="bold" />
+
+</RelativeLayout>

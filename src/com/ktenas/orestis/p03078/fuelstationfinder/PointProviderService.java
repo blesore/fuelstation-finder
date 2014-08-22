@@ -28,51 +28,50 @@ import com.ktenas.orestis.p03078.fuelstationfinder.entities.FuelType;
 import com.ktenas.orestis.p03078.fuelstationfinder.entities.StationBrand;
 
 public class PointProviderService extends Service {
-	private final IBinder localBinder = new LocalBinder();
-	private static Set<FuelStation> points = new HashSet<>();
+    private final IBinder localBinder = new LocalBinder();
+    private static Set<FuelStation> points = new HashSet<>();
 
-	public Set<FuelStation> getPoints(Location location) {
-		double lat;
-		double lng;
-		if (points.isEmpty()) {
-			try {
-				InputStream is = getAssets().open("randomPoints.txt");
-				BufferedReader br = new BufferedReader(
-						new InputStreamReader(is));
-				String line;
-				String[] temp = new String[2];
+    public Set<FuelStation> getPoints(Location location) {
+        double lat;
+        double lng;
+        if (points.isEmpty()) {
+            try {
+                InputStream is = getAssets().open("randomPoints.txt");
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                String line;
+                String[] temp = new String[2];
 
-				while ((line = br.readLine()) != null) {
-					temp = line.split(",");
-					lat = Double.parseDouble(temp[0]);
-					lng = Double.parseDouble(temp[1]);
-					points.add(new FuelStation(0, null, null, StationBrand.AEGEAN, new LatLng(lat, lng), Arrays.asList(new Fuel[]{new Fuel(FuelType.UNLEADED_95, (float) 1.685)}), new Date(2014, 8, 18)));
-				}
-				br.close();
-			} catch (IOException e) {
-				Log.e("Parsing Error",
-						"Something went wrong while parsing the file");
-				e.printStackTrace();
-			}
-		}
-		return points;
-	}
+                while ((line = br.readLine()) != null) {
+                    temp = line.split(",");
+                    lat = Double.parseDouble(temp[0]);
+                    lng = Double.parseDouble(temp[1]);
+                    points.add(new FuelStation(0, null, null, StationBrand.AEGEAN, new LatLng(lat, lng), Arrays.asList(new Fuel[] { new Fuel(
+                            FuelType.UNLEADED_95, (float) 1.685) }), new Date(2014, 8, 18), false));
+                }
+                br.close();
+            } catch (IOException e) {
+                Log.e("Parsing Error", "Something went wrong while parsing the file");
+                e.printStackTrace();
+            }
+        }
+        return points;
+    }
 
-	@Override
-	public IBinder onBind(Intent intent) {
-		return localBinder;
-	}
+    @Override
+    public IBinder onBind(Intent intent) {
+        return localBinder;
+    }
 
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-		// TODO Auto-generated method stub
-		super.onStartCommand(intent, flags, startId);
-		return Service.START_NOT_STICKY;
-	}
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        // TODO Auto-generated method stub
+        super.onStartCommand(intent, flags, startId);
+        return Service.START_NOT_STICKY;
+    }
 
-	public class LocalBinder extends Binder {
-		PointProviderService getService() {
-			return PointProviderService.this;
-		}
-	}
+    public class LocalBinder extends Binder {
+        PointProviderService getService() {
+            return PointProviderService.this;
+        }
+    }
 }
