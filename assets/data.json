@@ -1,0 +1,175 @@
+{
+  "points": [
+    {
+      "stationCode":,
+      "address":"",
+      "ownerName":"",
+      "brand":"BP",
+      "position":
+		{
+			"latitude":"",
+			"longitude":""
+		},
+	  "availableFuel": [
+  				{
+  					"type":"Unleaded 95", 
+  					"price":"1.635"
+  				},
+  				{
+  					"type":"Unleaded 100",
+  					"price":"1.710"
+  				},
+  				{
+  					"type":"Diesel",
+  					"price":"1.350"
+  				}
+  			]
+		"lastUpdated":"",
+		"isCheapestInRange":""
+    },
+    {
+      "stationCode":,
+      "address":"",
+      "ownerName":"",
+      "brand":"AVIN",
+      "position":
+		{
+			"latitude":"",
+			"longitude":""
+		},
+	  "availableFuel": [
+  				{
+  					"type":"Unleaded 95", 
+  					"price":1.635
+  				},
+  				{
+  					"type":"Unleaded 100",
+  					"price":1.710
+  				},
+  				{
+  					"type":"Diesel",
+  					"price":1.350
+  				},
+  			]
+		"lastUpdated":"2013-09-20",
+		"isCheapestInRange":true
+    },
+    {
+      "stationCode":,
+      "address":"",
+      "ownerName":"",
+      "brand":"SHELL",
+      "position":
+		{
+			"latitude":"",
+			"longitude":""
+		},
+	  "availableFuel": [
+  				{
+  					"type":"Unleaded 95", 
+  					"price":1.635
+  				},
+  				{
+  					"type":"Unleaded 100",
+  					"price":1.710
+  				},
+  				{
+  					"type":"Diesel",
+  					"price":1.350
+  				}
+  			]
+		"lastUpdated":"2013-09-20",
+		"isCheapestInRange":false
+    },
+    {
+      "stationCode":,
+      "address":"",
+      "ownerName":"",
+      "brand":"SHELL",
+      "position":
+		{
+			"latitude":"",
+			"longitude":""
+		},
+	  "availableFuel": [
+  				{
+  					"type":"Unleaded 95", 
+  					"price":1.635
+  				},
+  				{
+  					"type":"Unleaded 100",
+  					"price":1.710
+  				},
+  				{
+  					"type":"Diesel",
+  					"price":1.350
+  				}
+  			]
+		"lastUpdated":"2013-09-20",
+		"isCheapestInRange":false
+    },
+    {
+      "stationCode":,
+      "address":"",
+      "ownerName":"",
+      "brand":"ETEKA",
+      "position":
+		{
+			"latitude":"",
+			"longitude":""
+		},
+	  "availableFuel": [
+  				{
+  					"type":"Unleaded 95", 
+  					"price":1.635
+  				},
+  				{
+  					"type":"Unleaded 100",
+  					"price":1.710
+  				},
+  				{
+  					"type":"Diesel",
+  					"price":1.350
+  				}
+  			]
+		"lastUpdated":"2013-09-20",
+		"isCheapestInRange":false
+    },
+    {
+      "stationCode":,
+      "address":"",
+      "ownerName":"",
+      "brand":"REVOIL",
+      "position":
+		{
+			"latitude":"",
+			"longitude":""
+		},
+	  "availableFuel": [
+  				{
+  					"type":"Unleaded 95", 
+  					"price":1.635
+  				},
+  				{
+  					"type":"Unleaded 100",
+  					"price":1.710
+  				},
+  				{
+  					"type":"Diesel",
+  					"price":1.350
+  				},
+  				{
+  					"type":"Diesel",
+  					"price":1.350
+  				},
+  				{
+  					"type":"Autogas",
+  					"price":1.350
+  				},
+  			]
+		"lastUpdated":"2013-09-20",
+		"isCheapestInRange":false
+    },
+  ]
+}
+    

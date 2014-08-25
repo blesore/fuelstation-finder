@@ -11,7 +11,8 @@
 	<properties>
 		<!-- use UTF-8 for everything -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<project.reporting.outputEncoding>UTF-8
+		</project.reporting.outputEncoding>
 	</properties>
 
 	<name>FuelStationFinder</name>
@@ -51,6 +52,12 @@
 			<artifactId>google-play-services</artifactId>
 			<version>18.0.0</version>
 			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>com.google.maps.android</groupId>
+			<artifactId>android-maps-utils-apklib</artifactId>
+			<version>0.3.1</version>
+			<type>apklib</type>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.android</groupId>

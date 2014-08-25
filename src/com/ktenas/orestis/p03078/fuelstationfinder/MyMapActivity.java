@@ -22,6 +22,7 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -46,13 +47,14 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.ui.TextIconGenerator;
 import com.ktenas.orestis.p03078.fuelstationfinder.PointProviderService.LocalBinder;
+import com.ktenas.orestis.p03078.fuelstationfinder.SettingsFragment.OnFilterChangeListener;
 import com.ktenas.orestis.p03078.fuelstationfinder.entities.FuelStation;
 
-public class MyMapActivity extends AbstractMapAndTrackActivity implements LocationListener, OnMarkerClickListener {
+public class MyMapActivity extends AbstractMapAndTrackActivity implements LocationListener, OnMarkerClickListener, OnFilterChangeListener {
 
     private SharedPreferences prefs;
     private PointProviderService boundService;
-    boolean isServiceBound = false;
+    private boolean isServiceBound = false;
     private static ExecutorService threadPoolExecutor;
     private GoogleMap map;
     private MapFragment mapFragment;
@@ -78,17 +80,28 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements Locati
         }
     };
     // Metrics for camera update
-    private CameraPosition DEFAULT_CAMERA_POSITION = new CameraPosition(new LatLng(37.9245587, 23.8192248), 15, 30, 0);
-    private final float DISTANCE_THRESHOLD = 100; // in meters
+    private int distanceThreshold = 100; // in meters
     private final float SPEED_THRESHOLD = 1; // in meters/sec
-    private final int UPDATE_INTERVAL = 10000;
+    private final int UPDATE_INTERVAL = 7000;
     private final int FASTEST_UPDATE_INTERVAL = 5000;
+    private int initialZoom = 10;
+    private int numberOfPoints;
+    private String fuelType;
+    private String stationBrand;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        setDrivingMode(prefs.getString("driving_mode", "0"));
+        fuelType  = prefs.getString("fuel_type", "0");
+        stationBrand = prefs.getString("station_brand", "0");
+
+        CameraPosition initialCameraPosition = new CameraPosition(new LatLng(37.9245587, 23.8192248), initialZoom, 30, 0);
+        
         if (servicesConnected()) {
             // mapFragment = (MapFragment)
             // getFragmentManager().findFragmentById(
@@ -103,7 +116,7 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements Locati
                 // We only create a fragment if it doesn't already exist.
                 if (mapFragment == null) {
                     GoogleMapOptions googleMapOptions = new GoogleMapOptions();
-                    googleMapOptions.mapType(GoogleMap.MAP_TYPE_NORMAL).camera(DEFAULT_CAMERA_POSITION).compassEnabled(true).rotateGesturesEnabled(true)
+                    googleMapOptions.mapType(GoogleMap.MAP_TYPE_NORMAL).camera(initialCameraPosition).compassEnabled(true).rotateGesturesEnabled(true)
                             .scrollGesturesEnabled(true).zoomGesturesEnabled(true).zoomControlsEnabled(false).tiltGesturesEnabled(true);
                     mapFragment = MapFragment.newInstance(googleMapOptions);
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -122,6 +135,7 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements Locati
 
             setUpMapIfNeeded();
             threadPoolExecutor = Executors.newFixedThreadPool(5);
+            
 
             // Setup location services client
             googleApiClient = new GoogleApiClient.Builder(this).addApi(LocationServices.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this)
@@ -129,8 +143,6 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements Locati
 
             locationRequest = LocationRequest.create().setFastestInterval(FASTEST_UPDATE_INTERVAL).setInterval(UPDATE_INTERVAL)
                     .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
-            prefs = PreferenceManager.getDefaultSharedPreferences(this);
         }
     }
 
@@ -235,7 +247,7 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements Locati
 
         @Override
         public Set<FuelStation> call() {
-            Set<FuelStation> relativePoints = boundService.getPoints(lastKnownLocation);
+            Set<FuelStation> relativePoints = boundService.getPoints(lastUpdateLocation, fuelType, stationBrand, numberOfPoints);
             return relativePoints;
         }
     };
@@ -256,10 +268,8 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements Locati
             map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
             // get new set of points only if user has moved
-            if (currentLocation.distanceTo(lastUpdateLocation) > DISTANCE_THRESHOLD) {
+            if (currentLocation.distanceTo(lastUpdateLocation) > distanceThreshold) {
                 lastUpdateLocation = currentLocation;
-                map.clear();
-                stationPoints.clear();
                 updatePoints(threadPoolExecutor.submit(task));
             }
         }
@@ -268,40 +278,20 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements Locati
     // call service methods
     private void updatePoints(Future<Set<FuelStation>> future) {
         if (boundService != null) {
+            map.clear();
+            stationPoints.clear();
             try {
                 Set<FuelStation> points = future.get();
                 for (FuelStation point : points) {
                     // addMarker(map, point);
+                    // delegate marker building to the background to unload main thread
                     new BubbleTask().executeOnExecutor(threadPoolExecutor, point);
                 }
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
+                Toast.makeText(this, "Update service is unavailable", Toast.LENGTH_LONG).show();
             }
         }
-    }
-
-    // NOT USED
-    private void addMarker(GoogleMap map, FuelStation point) {
-        Marker marker = map.addMarker(new MarkerOptions().position(point.getPosition()).icon(
-                BitmapDescriptorFactory.fromBitmap(createMarkerIcon(Float.toString(point.getAvailableFuel().get(0).getPrice()), point.getBrand().getLogo()))));
-        if (!stationPoints.containsValue(point)) {
-            stationPoints.put(marker.getId(), point);
-        }
-    }
-    
-    // NOT USED
-    private Bitmap createMarkerIcon(String text, int logoDrawable) {
-        ViewGroup contentView = (ViewGroup) getLayoutInflater().inflate(R.layout.custom_marker_layout, null);
-        ImageView logoIcon = (ImageView) contentView.findViewById(R.id.station_brand_placeholder);
-        logoIcon.setImageResource(logoDrawable);
-        TextView price = (TextView) contentView.findViewById(R.id.marker_price);
-        price.setText(text);
-
-        TextIconGenerator textIconGenerator = new TextIconGenerator(this);
-        textIconGenerator.setContentView(contentView);
-        Bitmap markerIconBitmap = textIconGenerator.makeIcon();
-
-        return markerIconBitmap;
     }
     
     // Marker related methods
@@ -312,6 +302,7 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements Locati
         return true;
     }
 
+    // AsyncTask to build marker drawables
     private class BubbleTask extends AsyncTask<FuelStation, Void, MarkerOptions> {
 
         protected TextIconGenerator textIconGenerator = new TextIconGenerator(getApplicationContext());
@@ -340,5 +331,49 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements Locati
             stationPoints.put(marker.getId(), processedPoint);
             super.onPostExecute(result);
         }
+    }
+
+    @Override
+    public void onFilterChange(Preference pref) {
+        String key = pref.getKey();
+        switch (key) {
+            case "fuel_type":
+                fuelType = prefs.getString("fuel_type", "0");
+                break;
+            case "station_brand":
+                stationBrand = prefs.getString("station_brand", "0");
+                break;
+            case "driving_mode":
+                setDrivingMode(prefs.getString("driving_mode", "1"));
+                break;
+        }
+        updatePoints(threadPoolExecutor.submit(task));
+        Toast.makeText(getApplicationContext(), "fuel_type: " + fuelType + " station_brand: " + stationBrand + " numPoints: " + numberOfPoints, Toast.LENGTH_LONG).show();
+    }
+    
+    private void setDrivingMode(String mode) {
+        switch (mode) {
+            case "0":
+                initialZoom = 16;
+                distanceThreshold = 500;
+                numberOfPoints = 30;
+                break;
+            case "1":
+                initialZoom = 15;
+                distanceThreshold = 1000;
+                numberOfPoints = 20;
+                break;
+            case "2":
+                initialZoom = 14;
+                distanceThreshold = 5000;
+                numberOfPoints = 10;
+                break;
+            default:
+                initialZoom = 15;
+                distanceThreshold = 1000;
+                numberOfPoints = 20;
+                break;
+        }
+        Toast.makeText(getApplicationContext(), "fuel_type: " + fuelType + " station_brand: " + stationBrand + " numPoints: " + numberOfPoints, Toast.LENGTH_LONG).show();
     }
 }

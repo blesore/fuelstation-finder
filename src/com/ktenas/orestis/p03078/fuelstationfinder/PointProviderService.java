@@ -4,14 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Set;
 
 import android.app.Service;
@@ -20,6 +15,7 @@ import android.location.Location;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.ktenas.orestis.p03078.fuelstationfinder.entities.Fuel;
@@ -31,7 +27,7 @@ public class PointProviderService extends Service {
     private final IBinder localBinder = new LocalBinder();
     private static Set<FuelStation> points = new HashSet<>();
 
-    public Set<FuelStation> getPoints(Location location) {
+    public Set<FuelStation> getPoints(Location location, String fuelType, String stationBrand, int numberOfPoints) {
         double lat;
         double lng;
         if (points.isEmpty()) {

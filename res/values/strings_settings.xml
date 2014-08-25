@@ -6,8 +6,8 @@
     <string name="pref_title_driving_mode">Driving Mode</string>
 
     <string-array name="pref_driving_mode_titles">
-        <item>Hybrid Mode</item>
         <item>City Mode</item>
+        <item>Hybrid Mode</item>
         <item>Trip Mode</item>
     </string-array>
     <string-array name="pref_driving_mode_values">
