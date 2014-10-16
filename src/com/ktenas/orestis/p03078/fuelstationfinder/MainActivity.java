@@ -2,7 +2,7 @@ package com.ktenas.orestis.p03078.fuelstationfinder;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -45,12 +45,12 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.maps.android.ui.TextIconGenerator;
+import com.google.maps.android.ui.IconGenerator;
 import com.ktenas.orestis.p03078.fuelstationfinder.PointProviderService.LocalBinder;
 import com.ktenas.orestis.p03078.fuelstationfinder.SettingsFragment.OnFilterChangeListener;
 import com.ktenas.orestis.p03078.fuelstationfinder.entities.FuelStation;
 
-public class MyMapActivity extends AbstractMapAndTrackActivity implements LocationListener, OnMarkerClickListener, OnFilterChangeListener {
+public class MainActivity extends AbstractMapAndTrackActivity implements LocationListener, OnMarkerClickListener, OnFilterChangeListener {
 
     private SharedPreferences prefs;
     private PointProviderService boundService;
@@ -76,12 +76,12 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements Locati
             LocalBinder binder = (LocalBinder) service;
             boundService = binder.getService();
             isServiceBound = true;
-            Toast.makeText(MyMapActivity.this, "Service Connected", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Service Connected", Toast.LENGTH_SHORT).show();
         }
     };
     // Metrics for camera update
     private int distanceThreshold = 100; // in meters
-    private final float SPEED_THRESHOLD = 1; // in meters/sec
+    private final float SPEED_THRESHOLD = 0.5f; // in meters/sec
     private final int UPDATE_INTERVAL = 7000;
     private final int FASTEST_UPDATE_INTERVAL = 5000;
     private int initialZoom = 10;
@@ -93,7 +93,7 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements Locati
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
+        setContentView(R.layout.activity_main);
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         setDrivingMode(prefs.getString("driving_mode", "0"));
@@ -104,8 +104,7 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements Locati
         
         if (servicesConnected()) {
             // mapFragment = (MapFragment)
-            // getFragmentManager().findFragmentById(
-            // R.id.map);
+            // getFragmentManager().findFragmentById(R.id.map);
 
             // It isn't possible to set a fragment's id programmatically so
             // we set a tag instead and
@@ -127,16 +126,14 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements Locati
                     mapFragment.setRetainInstance(true);
                 }
             } else {
-                // Reincarnated activity. The obtained map is the same map
-                // instance in the previous
-                // activity life cycle. There is no need to reinitialize it.
+                // Reincarnated activity. The obtained map is the same map instance in the previous activity life cycle.
+                // There is no need to reinitialize it.
                 map = mapFragment.getMap();
             }
 
             setUpMapIfNeeded();
             threadPoolExecutor = Executors.newFixedThreadPool(5);
             
-
             // Setup location services client
             googleApiClient = new GoogleApiClient.Builder(this).addApi(LocationServices.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this)
                     .build();
@@ -243,11 +240,11 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements Locati
     }
 
     // Callable for worker thread to fetch points
-    private Callable<Set<FuelStation>> task = new Callable<Set<FuelStation>>() {
+    private Callable<List<FuelStation>> getPointsTask = new Callable<List<FuelStation>>() {
 
         @Override
-        public Set<FuelStation> call() {
-            Set<FuelStation> relativePoints = boundService.getPoints(lastUpdateLocation, fuelType, stationBrand, numberOfPoints);
+        public List<FuelStation> call() {
+            List<FuelStation> relativePoints = boundService.getPoints(lastUpdateLocation, fuelType, stationBrand, numberOfPoints);
             return relativePoints;
         }
     };
@@ -259,7 +256,7 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements Locati
             if (lastUpdateLocation == null) {
                 lastUpdateLocation = currentLocation;
                 // fetch first set of points
-                updatePoints(threadPoolExecutor.submit(task));
+                updatePoints(threadPoolExecutor.submit(getPointsTask));
             }
             CameraPosition currentCameraPosition = map.getCameraPosition();
             CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()))
@@ -270,20 +267,20 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements Locati
             // get new set of points only if user has moved
             if (currentLocation.distanceTo(lastUpdateLocation) > distanceThreshold) {
                 lastUpdateLocation = currentLocation;
-                updatePoints(threadPoolExecutor.submit(task));
+                updatePoints(threadPoolExecutor.submit(getPointsTask));
             }
         }
     }
 
     // call service methods
-    private void updatePoints(Future<Set<FuelStation>> future) {
+    private void updatePoints(Future<List<FuelStation>> future) {
         if (boundService != null) {
+            //clear map from previous points
             map.clear();
             stationPoints.clear();
             try {
-                Set<FuelStation> points = future.get();
+                List<FuelStation> points = future.get();
                 for (FuelStation point : points) {
-                    // addMarker(map, point);
                     // delegate marker building to the background to unload main thread
                     new BubbleTask().executeOnExecutor(threadPoolExecutor, point);
                 }
@@ -305,7 +302,7 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements Locati
     // AsyncTask to build marker drawables
     private class BubbleTask extends AsyncTask<FuelStation, Void, MarkerOptions> {
 
-        protected TextIconGenerator textIconGenerator = new TextIconGenerator(getApplicationContext());
+        protected IconGenerator textIconGenerator = new IconGenerator(getApplicationContext());
         protected FuelStation processedPoint;
 
         @Override
@@ -317,12 +314,12 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements Locati
                 ImageView logoIcon = (ImageView) contentView.findViewById(R.id.station_brand_placeholder);
                 logoIcon.setImageResource(processedPoint.getBrand().getLogo());
                 TextView price = (TextView) contentView.findViewById(R.id.marker_price);
-                price.setText(Float.toString(processedPoint.getAvailableFuel().get(0).getPrice()));
+                price.setText(Float.toString(processedPoint.getAvailableFuel().get(0/*Integer.parseInt(fuelType)*/).getPrice()));
 
                 textIconGenerator.setContentView(contentView);
                 b = textIconGenerator.makeIcon();
             }
-            return new MarkerOptions().position(points[0].getPosition()).icon(BitmapDescriptorFactory.fromBitmap(b));
+            return new MarkerOptions().position(points[0].getLocation()).icon(BitmapDescriptorFactory.fromBitmap(b));
         }
 
         @Override
@@ -347,7 +344,7 @@ public class MyMapActivity extends AbstractMapAndTrackActivity implements Locati
                 setDrivingMode(prefs.getString("driving_mode", "1"));
                 break;
         }
-        updatePoints(threadPoolExecutor.submit(task));
+        updatePoints(threadPoolExecutor.submit(getPointsTask));
         Toast.makeText(getApplicationContext(), "fuel_type: " + fuelType + " station_brand: " + stationBrand + " numPoints: " + numberOfPoints, Toast.LENGTH_LONG).show();
     }
     

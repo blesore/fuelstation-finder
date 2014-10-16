@@ -25,23 +25,6 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>android.support</groupId>
-			<artifactId>compatibility-v4</artifactId>
-			<version>20.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>android.support</groupId>
-			<artifactId>compatibility-v7-appcompat</artifactId>
-			<version>20.0.0</version>
-			<type>apklib</type>
-		</dependency>
-		<dependency>
-			<groupId>android.support</groupId>
-			<artifactId>compatibility-v7-appcompat</artifactId>
-			<version>20.0.0</version>
-			<type>jar</type>
-		</dependency>
-		<dependency>
 			<groupId>com.google.android.gms</groupId>
 			<artifactId>google-play-services</artifactId>
 			<version>18.0.0</version>
@@ -67,35 +50,26 @@
 	</dependencies>
 
 	<build>
-		<sourceDirectory>src</sourceDirectory>
-		<finalName>${project.artifactId}</finalName>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>com.jayway.maven.plugins.android.generation2</groupId>
-					<artifactId>android-maven-plugin</artifactId>
-					<version>3.8.2</version>
-					<extensions>true</extensions>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 		<plugins>
+			<plugin>
+				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+				<artifactId>android-maven-plugin</artifactId>
+				<version>3.8.2</version>
+				<configuration>
+					<sdk>
+						<platform>19</platform>
+					</sdk>
+					<deleteConflictingFiles>true</deleteConflictingFiles>
+					<undeployBeforeDeploy>true</undeployBeforeDeploy>
+				</configuration>
+				<extensions>true</extensions>
+			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
-				<artifactId>android-maven-plugin</artifactId>
-				<configuration>
-					<sdk>
-						<platform>19</platform>
-					</sdk>
-					<undeployBeforeDeploy>true</undeployBeforeDeploy>
 				</configuration>
 			</plugin>
 		</plugins>

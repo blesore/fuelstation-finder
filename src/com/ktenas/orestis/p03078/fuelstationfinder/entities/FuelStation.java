@@ -7,38 +7,33 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.ktenas.orestis.p03078.fuelstationfinder.enums.StationBrand;
 
 public class FuelStation implements Parcelable {
     private long stationCode;
     private String address;
     private String ownerName;
     private StationBrand brand;
-    private LatLng position;
+    private double[] location;
     private List<Fuel> availableFuel;
     private Date lastUpdated;
     private boolean isCheapestInRange = false;
 
-    public FuelStation(long stationCode, String address, String ownerName, StationBrand brand, LatLng position, List<Fuel> availableFuel, Date lastUpdated,
+    public FuelStation(){};
+    
+    public FuelStation(long stationCode, String address, String ownerName, StationBrand brand, double[] location, List<Fuel> availableFuel, Date lastUpdated,
             boolean isCheapestInRange) {
         super();
         this.stationCode = stationCode;
         this.address = address;
         this.ownerName = ownerName;
         this.brand = brand;
-        this.position = position;
+        this.location = location;
         this.availableFuel = availableFuel;
         this.lastUpdated = lastUpdated;
         this.isCheapestInRange = isCheapestInRange;
     }
     
-    public FuelStation(String address, StationBrand brand, List<Fuel> availableFuel, Date lastUpdated) {
-        super();
-        this.address = address;
-        this.brand = brand;
-        this.availableFuel = availableFuel;
-        this.lastUpdated = lastUpdated;
-    }
-
     public long getStationCode() {
         return stationCode;
     }
@@ -71,12 +66,12 @@ public class FuelStation implements Parcelable {
         this.brand = brand;
     }
 
-    public LatLng getPosition() {
-        return position;
+    public LatLng getLocation() {
+        return new LatLng(location[0], location[1]);
     }
 
-    public void setPosition(LatLng position) {
-        this.position = position;
+    public void setLocation(double[] location) {
+        this.location = location;
     }
 
     public List<Fuel> getAvailableFuel() {

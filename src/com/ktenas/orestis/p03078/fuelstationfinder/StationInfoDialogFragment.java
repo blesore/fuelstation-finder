@@ -79,7 +79,8 @@ public class StationInfoDialogFragment extends DialogFragment implements
 	}
 
 	public void driveMe() {
-		LatLng stationPosition = station.getPosition();
+		LatLng stationPosition = station.getLocation();
+		// implicit intent to turn-by-turn navigation
 		Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
 				Uri.parse("http://maps.google.com/maps?saddr="
 						+ myLocation.getLatitude() + ","

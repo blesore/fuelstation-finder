@@ -1,4 +1,4 @@
-package com.ktenas.orestis.p03078.fuelstationfinder.entities;
+package com.ktenas.orestis.p03078.fuelstationfinder.enums;
 
 public enum FuelType {
 	UNLEADED_95("Unleaded 95"),

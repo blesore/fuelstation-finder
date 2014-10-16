@@ -176,20 +176,4 @@ public class AbstractMapAndTrackActivity extends Activity implements
 		// Display the connection status
 		Log.d("Disconnection Event", "Disconnected. Please re-connect.");
 	}
-
-	public void onStatusChanged(String provider, int status, Bundle extras) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void onProviderEnabled(String provider) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void onProviderDisabled(String provider) {
-		// TODO Auto-generated method stub
-
-	}
-
 }

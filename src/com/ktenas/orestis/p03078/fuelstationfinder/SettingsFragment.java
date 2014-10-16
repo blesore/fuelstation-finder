@@ -58,10 +58,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
             setPreferenceSummary(preference);
             // notify activity to refresh points to match the filters
             filterChangeListener.onFilterChange(preference);
-        } else {
-            // For all other preferences, set the summary to the value's
-            // simple string representation.
-            // preference.setSummary(stringValue);
         }
     }
 
