@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -99,6 +100,8 @@ public class MainActivity extends AbstractMapAndTrackActivity implements Locatio
         setDrivingMode(prefs.getString("driving_mode", "0"));
         fuelType  = prefs.getString("fuel_type", "0");
         stationBrand = prefs.getString("station_brand", "0");
+        Log.i("Filters", "fuel_type: " + fuelType + " station_brand: " + stationBrand + " numPoints: " + numberOfPoints);
+        
 
         CameraPosition initialCameraPosition = new CameraPosition(new LatLng(37.9245587, 23.8192248), initialZoom, 30, 0);
         
@@ -345,7 +348,6 @@ public class MainActivity extends AbstractMapAndTrackActivity implements Locatio
                 break;
         }
         updatePoints(threadPoolExecutor.submit(getPointsTask));
-        Toast.makeText(getApplicationContext(), "fuel_type: " + fuelType + " station_brand: " + stationBrand + " numPoints: " + numberOfPoints, Toast.LENGTH_LONG).show();
     }
     
     private void setDrivingMode(String mode) {

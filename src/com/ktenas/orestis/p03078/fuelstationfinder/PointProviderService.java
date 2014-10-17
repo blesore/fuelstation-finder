@@ -2,7 +2,6 @@ package com.ktenas.orestis.p03078.fuelstationfinder;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 
 import android.app.Service;
@@ -10,6 +9,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Binder;
 import android.os.IBinder;
+import android.util.Log;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -37,7 +37,9 @@ public class PointProviderService extends Service {
 
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+        Log.i("REST Call", "Sending request to remote server for points");
         ResponseEntity<FuelStation[]> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, FuelStation[].class);
+        Log.i("REST Call", "Response received.");
         return Arrays.asList(responseEntity.getBody());
     }
 
