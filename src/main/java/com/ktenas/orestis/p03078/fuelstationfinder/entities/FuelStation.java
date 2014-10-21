@@ -67,7 +67,7 @@ public class FuelStation implements Parcelable {
     }
 
     public LatLng getLocation() {
-        return new LatLng(location[0], location[1]);
+        return new LatLng(location[1], location[0]);
     }
 
     public void setLocation(double[] location) {

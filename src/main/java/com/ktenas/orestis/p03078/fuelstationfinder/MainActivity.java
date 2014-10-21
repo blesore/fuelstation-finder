@@ -49,7 +49,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.ui.IconGenerator;
 import com.ktenas.orestis.p03078.fuelstationfinder.PointProviderService.LocalBinder;
 import com.ktenas.orestis.p03078.fuelstationfinder.SettingsFragment.OnFilterChangeListener;
+import com.ktenas.orestis.p03078.fuelstationfinder.entities.Fuel;
 import com.ktenas.orestis.p03078.fuelstationfinder.entities.FuelStation;
+import com.ktenas.orestis.p03078.fuelstationfinder.enums.FuelType;
 
 public class MainActivity extends AbstractMapAndTrackActivity implements LocationListener, OnMarkerClickListener, OnFilterChangeListener {
 
@@ -77,7 +79,7 @@ public class MainActivity extends AbstractMapAndTrackActivity implements Locatio
             LocalBinder binder = (LocalBinder) service;
             boundService = binder.getService();
             isServiceBound = true;
-            Toast.makeText(MainActivity.this, "Service Connected", Toast.LENGTH_SHORT).show();
+            Log.i("PointProviderService", "Point Provider Service Connected");
         }
     };
     // Metrics for camera update
@@ -106,11 +108,7 @@ public class MainActivity extends AbstractMapAndTrackActivity implements Locatio
         CameraPosition initialCameraPosition = new CameraPosition(new LatLng(37.9245587, 23.8192248), initialZoom, 30, 0);
         
         if (servicesConnected()) {
-            // mapFragment = (MapFragment)
-            // getFragmentManager().findFragmentById(R.id.map);
-
-            // It isn't possible to set a fragment's id programmatically so
-            // we set a tag instead and
+            // It isn't possible to set a fragment's id programmatically so we set a tag instead and
             // search for it using that.
             mapFragment = (MapFragment) getFragmentManager().findFragmentByTag(MAP_FRAGMENT_TAG);
 
@@ -203,11 +201,10 @@ public class MainActivity extends AbstractMapAndTrackActivity implements Locatio
                 e.printStackTrace();
             }
         }
-    };
+    }
 
     private void setUpMapIfNeeded() {
-        // Do a null check to confirm that we have not already instantiated the
-        // map.
+        // Do a null check to confirm that we have not already instantiated the map.
         if (map == null) {
             map = mapFragment.getMap();
             // Check if we were successful in obtaining the map.
@@ -247,8 +244,7 @@ public class MainActivity extends AbstractMapAndTrackActivity implements Locatio
 
         @Override
         public List<FuelStation> call() {
-            List<FuelStation> relativePoints = boundService.getPoints(lastUpdateLocation, fuelType, stationBrand, numberOfPoints);
-            return relativePoints;
+            return boundService.getPoints(lastUpdateLocation, fuelType, stationBrand, numberOfPoints);
         }
     };
 
@@ -305,22 +301,30 @@ public class MainActivity extends AbstractMapAndTrackActivity implements Locatio
     // AsyncTask to build marker drawables
     private class BubbleTask extends AsyncTask<FuelStation, Void, MarkerOptions> {
 
-        protected IconGenerator textIconGenerator = new IconGenerator(getApplicationContext());
+        protected IconGenerator iconGenerator = new IconGenerator(getApplicationContext());
         protected FuelStation processedPoint;
 
         @Override
         protected MarkerOptions doInBackground(FuelStation... points) {
             Bitmap b;
-            synchronized (textIconGenerator) {
+            synchronized (iconGenerator) {
                 processedPoint = points[0];
                 ViewGroup contentView = (ViewGroup) getLayoutInflater().inflate(R.layout.custom_marker_layout, null);
                 ImageView logoIcon = (ImageView) contentView.findViewById(R.id.station_brand_placeholder);
                 logoIcon.setImageResource(processedPoint.getBrand().getLogo());
                 TextView price = (TextView) contentView.findViewById(R.id.marker_price);
-                price.setText(Float.toString(processedPoint.getAvailableFuel().get(0/*Integer.parseInt(fuelType)*/).getPrice()));
-
-                textIconGenerator.setContentView(contentView);
-                b = textIconGenerator.makeIcon();
+                for (Fuel f : processedPoint.getAvailableFuel()) {
+                    if ( f.getFuelType() == decodeFuelType(fuelType)) {
+                        price.setText(Float.toString(f.getPrice()/1000));
+                    }
+                }
+                int style = IconGenerator.STYLE_WHITE;
+                if (processedPoint.isCheapestInRange()) {
+                    style = IconGenerator.STYLE_GREEN;
+                }
+                iconGenerator.setContentView(contentView);
+                iconGenerator.setStyle(style);
+                b = iconGenerator.makeIcon();
             }
             return new MarkerOptions().position(points[0].getLocation()).icon(BitmapDescriptorFactory.fromBitmap(b));
         }
@@ -355,24 +359,39 @@ public class MainActivity extends AbstractMapAndTrackActivity implements Locatio
             case "0":
                 initialZoom = 16;
                 distanceThreshold = 500;
-                numberOfPoints = 30;
+                numberOfPoints = 25;
                 break;
             case "1":
                 initialZoom = 15;
                 distanceThreshold = 1000;
-                numberOfPoints = 20;
+                numberOfPoints = 17;
                 break;
             case "2":
                 initialZoom = 14;
-                distanceThreshold = 5000;
+                distanceThreshold = 3500;
                 numberOfPoints = 10;
                 break;
             default:
                 initialZoom = 15;
                 distanceThreshold = 1000;
-                numberOfPoints = 20;
+                numberOfPoints = 17;
                 break;
         }
-        Toast.makeText(getApplicationContext(), "fuel_type: " + fuelType + " station_brand: " + stationBrand + " numPoints: " + numberOfPoints, Toast.LENGTH_LONG).show();
+        Log.i("Filters", "fuel_type: " + fuelType + " station_brand: " + stationBrand + " numPoints: " + numberOfPoints);
+    }
+
+    private FuelType decodeFuelType(String type) {
+        switch (type) {
+            case "0":
+                return FuelType.UNLEADED_95;
+            case "1":
+                return FuelType.UNLEADED_100;
+            case "2":
+                return FuelType.DIESEL;
+            case "3":
+                return FuelType.AUTOGAS;
+            default:
+                return FuelType.UNLEADED_95;
+        }
     }
 }

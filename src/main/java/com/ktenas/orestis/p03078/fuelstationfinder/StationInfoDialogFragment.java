@@ -1,5 +1,6 @@
 package com.ktenas.orestis.p03078.fuelstationfinder;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -53,6 +54,10 @@ public class StationInfoDialogFragment extends DialogFragment implements
 
 	private void setUpData() {
 		List<Fuel> fuelTypes = station.getAvailableFuel();
+        TextView address = (TextView) mainContainer.findViewById(R.id.address);
+        address.setText(station.getAddress());
+        TextView ownerInfo = (TextView) mainContainer.findViewById(R.id.owner_info);
+        ownerInfo.setText(station.getOwnerName());
 		for(Fuel fuel : fuelTypes) {
 			// put values into container
 			RelativeLayout listItem = (RelativeLayout) getActivity().getLayoutInflater().inflate(R.layout.fuel_list_item, null);
@@ -61,13 +66,14 @@ public class StationInfoDialogFragment extends DialogFragment implements
 			label.setText(fuel.getFuelType().getTitle() + ": ");
 			//set up fuel price view
 			TextView value = (TextView) listItem.findViewById(R.id.fuel_type_title);
-			value.setText(Float.toString(fuel.getPrice()));
+			value.setText(Float.toString(fuel.getPrice()/1000));
 			// inject it into container
 			LinearLayout ll = (LinearLayout) mainContainer.findViewById(R.id.fuel_info_container);
 			ll.addView(listItem);
 			// set date of last update
 			TextView lastUpdated = (TextView) mainContainer.findViewById(R.id.last_updated_value);
-			lastUpdated.setText(station.getLastUpdated().toString());
+            String sdf = new SimpleDateFormat("dd-MM-yyyy").format(station.getLastUpdated());
+			lastUpdated.setText(sdf);
 		} 
 	}
 	

@@ -1,27 +1,30 @@
-# Misc #
-*~
+﻿# built application files
+*.apk
+*.ap_
+
+# files for the dex VM
+*.dex
+
+# Java class files
 *.class
-target
-classes
-*.log
-.externalToolBuilders
 
-# Package Files #
-*.jar
-*.war
-*.ear
+# generated files
+bin/
+build/
+gen/
 
-# Eclipse files #
-.project
-.settings
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Eclipse project files
 .classpath
+.project
 
-# NetBeans files #
-nbactions*
-nb-configuration.xml
+# Gradle stuff
+.gradle
+gradle/
+gradle*
 
-# Android #
-gen
-api_key.xml
-bin
-libs
+# Idea project files 
+*.iml
+.idea

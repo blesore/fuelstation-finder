@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,10 +34,18 @@ public class AbstractMapAndTrackActivity extends Activity implements
 			startActivity(new Intent(this, LegalInfoActivity.class));
 			return (true);
 		case (R.id.action_settings):
-			getFragmentManager().beginTransaction()
-					.replace(R.id.map_container, new SettingsFragment()).addToBackStack(null)
-					.commit();
-			return true;
+            Handler handler = new Handler();
+            handler.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.map_container, new SettingsFragment()).addToBackStack(null)
+                            .commit();
+                }
+
+            });
+            return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -163,8 +172,7 @@ public class AbstractMapAndTrackActivity extends Activity implements
 	@Override
 	public void onConnected(Bundle dataBundle) {
 		// Display the connection status
-		Toast.makeText(this, "Connected to Location Services",
-				Toast.LENGTH_SHORT).show();
+		Log.i("Location Services", "Connected to Location Services");
 	}
 
 	/*
