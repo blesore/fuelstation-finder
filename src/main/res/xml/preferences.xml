@@ -30,4 +30,8 @@
         <intent android:action="android.settings.LOCATION_SOURCE_SETTINGS" />
     </Preference>
 
+    <EditTextPreference
+        android:title="@string/pref_server_base_url"
+        android:key="server_base_url"/>
+
 </PreferenceScreen>

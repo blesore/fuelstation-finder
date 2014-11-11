@@ -53,11 +53,14 @@ public class StationInfoDialogFragment extends DialogFragment implements
 	}
 
 	private void setUpData() {
-		List<Fuel> fuelTypes = station.getAvailableFuel();
+        // set address
         TextView address = (TextView) mainContainer.findViewById(R.id.address);
         address.setText(station.getAddress());
+        //set owner info
         TextView ownerInfo = (TextView) mainContainer.findViewById(R.id.owner_info);
         ownerInfo.setText(station.getOwnerName());
+        // set fuel info
+        List<Fuel> fuelTypes = station.getAvailableFuel();
 		for(Fuel fuel : fuelTypes) {
 			// put values into container
 			RelativeLayout listItem = (RelativeLayout) getActivity().getLayoutInflater().inflate(R.layout.fuel_list_item, null);
@@ -65,7 +68,7 @@ public class StationInfoDialogFragment extends DialogFragment implements
 			TextView label = (TextView) listItem.findViewById(R.id.fuel_type_label);
 			label.setText(fuel.getFuelType().getTitle() + ": ");
 			//set up fuel price view
-			TextView value = (TextView) listItem.findViewById(R.id.fuel_type_title);
+			TextView value = (TextView) listItem.findViewById(R.id.fuel_price);
 			value.setText(Float.toString(fuel.getPrice()/1000));
 			// inject it into container
 			LinearLayout ll = (LinearLayout) mainContainer.findViewById(R.id.fuel_info_container);

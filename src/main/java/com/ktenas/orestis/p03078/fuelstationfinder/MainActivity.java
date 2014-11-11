@@ -214,7 +214,7 @@ public class MainActivity extends AbstractMapAndTrackActivity implements Locatio
                 map.getUiSettings().setMyLocationButtonEnabled(false);
                 map.setOnMarkerClickListener(this);
             } else {
-                Toast.makeText(this, R.string.no_maps, Toast.LENGTH_LONG).show();
+                // Toast.makeText(this, R.string.no_maps, Toast.LENGTH_LONG).show();
             }
         } else {
             // set reincarnated activity as listener
@@ -285,7 +285,7 @@ public class MainActivity extends AbstractMapAndTrackActivity implements Locatio
                 }
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
-                Toast.makeText(this, "Update service is unavailable", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Update service is unavailable.\nCheck your connection.", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -314,7 +314,7 @@ public class MainActivity extends AbstractMapAndTrackActivity implements Locatio
                 logoIcon.setImageResource(processedPoint.getBrand().getLogo());
                 TextView price = (TextView) contentView.findViewById(R.id.marker_price);
                 for (Fuel f : processedPoint.getAvailableFuel()) {
-                    if ( f.getFuelType() == decodeFuelType(fuelType)) {
+                    if (f.getFuelType() == decodeFuelType(fuelType)) {
                         price.setText(Float.toString(f.getPrice()/1000));
                     }
                 }
@@ -349,6 +349,8 @@ public class MainActivity extends AbstractMapAndTrackActivity implements Locatio
                 break;
             case "driving_mode":
                 setDrivingMode(prefs.getString("driving_mode", "1"));
+                break;
+            default:
                 break;
         }
         updatePoints(threadPoolExecutor.submit(getPointsTask));

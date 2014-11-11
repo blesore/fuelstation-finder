@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -27,6 +28,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         setPreferenceSummary(findPreference("driving_mode"));
         setPreferenceSummary(findPreference("fuel_type"));
         setPreferenceSummary(findPreference("station_brand"));
+        setPreferenceSummary(findPreference("server_base_url"));
     }
 
     @Override
@@ -54,11 +56,11 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Preference preference = findPreference(key);
-        if (preference instanceof ListPreference) {
-            setPreferenceSummary(preference);
+        //if (preference instanceof ListPreference) {
             // notify activity to refresh points to match the filters
             filterChangeListener.onFilterChange(preference);
-        }
+        //}
+        setPreferenceSummary(preference);
     }
 
     // Set the summary to reflect the new value.
@@ -67,6 +69,10 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         if (preference instanceof ListPreference) {
             ListPreference listPref = (ListPreference) preference;
             CharSequence entry = listPref.getEntry();
+            preference.setSummary(!TextUtils.isEmpty(entry) ? entry : null);
+        } else {
+            EditTextPreference textPref = (EditTextPreference) preference;
+            String entry = textPref.getText();
             preference.setSummary(!TextUtils.isEmpty(entry) ? entry : null);
         }
     }

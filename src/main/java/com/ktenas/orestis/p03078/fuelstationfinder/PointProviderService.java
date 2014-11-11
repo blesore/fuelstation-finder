@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Binder;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.springframework.http.HttpEntity;
@@ -25,10 +26,17 @@ import com.ktenas.orestis.p03078.fuelstationfinder.enums.FuelType;
 
 public class PointProviderService extends Service {
     private final IBinder localBinder = new LocalBinder();
+    private String serverBaseUrl;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        serverBaseUrl = PreferenceManager.getDefaultSharedPreferences(this).getString("server_base_url", "0.0.0.0");
+    }
 
     public List<FuelStation> getPoints(Location location, String fuelType, String stationBrand, int numOfPoints) {
         //request url
-        final String url = "http://62.38.27.218:8087/fuelstations?lat=" + location.getLatitude() + "&lon=" + location.getLongitude() + "&fuelType=" + fuelType
+        final String url = "http://" + serverBaseUrl + ":8087/fuelstations?lat=" + location.getLatitude() + "&lon=" + location.getLongitude() + "&fuelType=" + fuelType
                 + "&brand=" + stationBrand + "&numOfPoints=" + numOfPoints;
 
         // Set the Accept header

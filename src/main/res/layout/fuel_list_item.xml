@@ -10,7 +10,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/fuel_type_title"
+        android:id="@+id/fuel_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/fuel_type_label" />
